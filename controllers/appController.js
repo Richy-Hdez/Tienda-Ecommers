@@ -126,23 +126,25 @@ exports.compra_post = async (req, res) => {
 
     await nuevaCompra.save();
     
-    // Configurar correo electrónico (USANDO MAILTRAP para pruebas)
-    const transporter = nodemailer.createTransport({
-      host: "sandbox.smtp.mailtrap.io",
-      port: 2525, 
-      secure: false,
-      auth: {
-        user: "d516b3b7b61af1", // Tu Username de Mailtrap
-        pass: "TU_PASSWORD_REAL_DE_MAILTRAP" // ¡REEMPLAZA ESTO CON LA CLAVE DE 16 DÍGITOS DE MAILTRAP!
-      }
-    });
+// En controllers/appController.js, dentro de exports.compra_post
 
-    // Opciones del correo (usando req.session.email en lugar de post.email)
-    const mailOptions = {
-      from: "info@tu-tienda.com", // Dirección de envío de prueba
-      to: req.session.email, 
-      subject: "Su compra fue realizada con éxito",
-      html: `<div style="font-family:Arial,sans-serif;line-height:1.6;background-color: antiquewhite;margin:0;padding: 42px;">
+// Configurar correo electrónico (USANDO SENDGRID SMTP RELAY)
+const transporter = nodemailer.createTransport({
+  host: "smtp.sendgrid.net", // Host de SendGrid
+  port: 587, // Puerto estándar SMTP
+  secure: false, 
+  auth: {
+    user: "apikey", // Usuario fijo de SendGrid para SMTP
+    pass: "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" // <--- ¡TU CLAVE SECRETA COMPLETA!
+  }
+});
+
+// Opciones del correo
+const mailOptions = {
+  from: "richydos03@gmail.com", // <--- Tu correo VERIFICADO (Remitente)
+  to: req.session.email, // Aquí va el correo del usuario (Destinatario)
+  subject: "Su compra fue realizada con éxito",
+  html: `<div style="font-family:Arial,sans-serif;line-height:1.6;background-color: antiquewhite;margin:0;padding: 42px;">
           <div style="max-width: 600px; margin: 0 auto;padding: 20px; background-color: #ffff;border-radius: 5px; box-shadow: 0 0 10;">
               <h1 style="font-size: 24px; color: #333333; margin-bottom: 20px;">Confirmación de compra</h1>
               <p>Hola,</p>
@@ -158,8 +160,7 @@ exports.compra_post = async (req, res) => {
                  href="http://localhost:3000/ticket/${nuevaCompra._id}">Ver ticket de compra</a></p>
           </div></div>`
     };
-
-    // Enviar correo
+   // Enviar correo
     await transporter.sendMail(mailOptions);
     
  // Limpiar carrito del localStorage
