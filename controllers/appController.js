@@ -2,8 +2,8 @@ const bcrypt = require("bcryptjs");
 const User = require("../models/User");
 const Compra = require('../models/Compra'); // Ajusta la ruta si es diferente
 const config = require("config");
-config.correogmail = process.env.GMAIL_USER;
-config.passwordgmail = process.env.GMAIL_PASS;
+config.correogmail = "richydos03@gmail.com";
+config.passwordgmail = "ilbkottviuawvoac";
 const nodemailer = require('nodemailer');
 
 exports.landing_page = (req, res) => {

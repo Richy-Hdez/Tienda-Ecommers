@@ -1,8 +1,8 @@
 const config = require("config");
 const db = config.get("mongoURI");
 const mongoose = require("mongoose");
-config.correogmail = "ericklopezod@gmail.com";
-config.passwordgmail = "vlmavpzpbgacuvmi";
+config.correogmail = "richydos03@gmail.com";
+config.passwordgmail = "ilbkottviuawvoac";
 
 const connectDB = async () => {
   try {
