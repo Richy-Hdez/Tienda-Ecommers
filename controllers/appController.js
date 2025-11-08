@@ -127,7 +127,6 @@ exports.compra_post = async (req, res) => {
     await nuevaCompra.save();
     
 // En controllers/appController.js, dentro de exports.compra_post
-
 // Configurar correo electrónico (USANDO SENDGRID SMTP RELAY)
 const transporter = nodemailer.createTransport({
   host: "smtp.sendgrid.net", // Host de SendGrid
@@ -141,8 +140,8 @@ const transporter = nodemailer.createTransport({
 
 // Opciones del correo
 const mailOptions = {
-  from: "richydos03@gmail.com", // <--- Tu correo VERIFICADO (Remitente)
-  to: req.session.email, // Aquí va el correo del usuario (Destinatario)
+  from: process.env.GMAIL_USER, //Usando el nombre de la variable
+  to: req.session.email, 
   subject: "Su compra fue realizada con éxito",
   html: `<div style="font-family:Arial,sans-serif;line-height:1.6;background-color: antiquewhite;margin:0;padding: 42px;">
           <div style="max-width: 600px; margin: 0 auto;padding: 20px; background-color: #ffff;border-radius: 5px; box-shadow: 0 0 10;">
