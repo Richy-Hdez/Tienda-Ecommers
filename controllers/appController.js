@@ -2,8 +2,8 @@ const bcrypt = require("bcryptjs");
 const User = require("../models/User");
 const Compra = require('../models/Compra'); // Ajusta la ruta si es diferente
 const config = require("config");
-config.correogmail = "richydos03@gmail.com";
-config.passwordgmail = "ilbkottviuawvoac";
+//config.correogmail = "richydos03@gmail.com";
+//config.passwordgmail = "ilbkottviuawvoac";
 const nodemailer = require('nodemailer');
 
 exports.landing_page = (req, res) => {
@@ -93,89 +93,91 @@ exports.logout_post = (req, res) => {
 };
 
 exports.compra_post = async (req, res) => {
-  try {
-    // Verificar autenticación primero
-    if (!req.session.isAuth || !req.session.email) {
-      console.log("Usuario no autenticado - Redirigiendo a login");
-      return res.redirect('/login');
-    }
+  try {
+    // Verificar autenticación primero
+    if (!req.session.isAuth || !req.session.email) {
+      console.log("Usuario no autenticado - Redirigiendo a login");
+      return res.redirect('/login');
+    }
 
-    // Verificar datos del carrito
-    if (!req.body.carrito || !req.body.grantotal) {
-      throw new Error("Datos de compra incompletos");
-    }
+    // Verificar datos del carrito
+    if (!req.body.carrito || !req.body.grantotal) {
+      throw new Error("Datos de compra incompletos");
+    }
 
-    const productos = JSON.parse(req.body.carrito);
-    const grantotal = parseFloat(req.body.grantotal);
+    const productos = JSON.parse(req.body.carrito);
+    const grantotal = parseFloat(req.body.grantotal);
 
-    // Validar estructura del carrito
-    if (!Array.isArray(productos)) {
-      throw new Error("Formato de carrito inválido");
-    }
+    // Validar estructura del carrito
+    if (!Array.isArray(productos)) {
+      throw new Error("Formato de carrito inválido");
+    }
 
-    // Crear y guardar la compra
-    const nuevaCompra = new Compra({
-      email: req.session.email,
-      productos: productos.map(item => ({
-        titulo: item.titulo,
-        precio: item.precio,
-        cantidad: item.cantidad
-      })),
-      grantotal: grantotal
-    });
+    // Crear y guardar la compra
+    const nuevaCompra = new Compra({
+      email: req.session.email,
+      productos: productos.map(item => ({
+        titulo: item.titulo,
+        precio: item.precio,
+        cantidad: item.cantidad
+      })),
+      grantotal: grantotal
+    });
 
-    await nuevaCompra.save();
-    
-    // Configurar correo electrónico
-    const transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
-      port: 587,
-      secure: false,
-      requireTLS: true,
-      auth: {
-        user: config.correogmail,
-        pass: config.passwordgmail
-      }
-    });
+    await nuevaCompra.save();
+    
+    // Configurar correo electrónico (USANDO MAILTRAP para pruebas)
+    const transporter = nodemailer.createTransport({
+      host: "sandbox.smtp.mailtrap.io",
+      port: 2525, 
+      secure: false,
+      auth: {
+        user: "d516b3b7b61af1", // Tu Username de Mailtrap
+        pass: "TU_PASSWORD_REAL_DE_MAILTRAP" // ¡REEMPLAZA ESTO CON LA CLAVE DE 16 DÍGITOS DE MAILTRAP!
+      }
+    });
 
-    // Opciones del correo (usando req.session.email en lugar de post.email)
-    const mailOptions = {
-      from: config.correogmail,
-      to: req.session.email, // Corregido: usar email de la sesión
-      subject: "Su compra fue realizada con éxito",
-      html: `<div style="font-family:Arial,sans-serif;line-height:1.6;background-color: antiquewhite;margin:0;padding: 42px;">
-          <div style="max-width: 600px; margin: 0 auto;padding: 20px; background-color: #ffff;border-radius: 5px; box-shadow: 0 0 10;">
-              <h1 style="font-size: 24px; color: #333333; margin-bottom: 20px;">Confirmación de compra</h1>
-              <p>Hola,</p>
-              <p>Gracias por tu compra. Aquí están los detalles:</p>
-              <ul>
-                ${productos.map(item => `
-                  <li>${item.titulo} - Cantidad: ${item.cantidad} - $${item.precio.toFixed(2)}</li>
-                `).join('')}
-              </ul>
-              <p><strong>Total: $${grantotal.toFixed(2)}</strong></p>
-              <p>Para ver tu ticket de compra, haz clic en el siguiente enlace:</p>
-              <p><a style="display: inline-block; padding: 10px 20px; background-color: #337ab7; color:#fff; text-decoration: none; border-radius:3px;" 
-                 href="http://localhost:3000/ticket/${nuevaCompra._id}">Ver ticket de compra</a></p>
-          </div></div>`
-    };
+    // Opciones del correo (usando req.session.email en lugar de post.email)
+    const mailOptions = {
+      from: "info@tu-tienda.com", // Dirección de envío de prueba
+      to: req.session.email, 
+      subject: "Su compra fue realizada con éxito",
+      html: `<div style="font-family:Arial,sans-serif;line-height:1.6;background-color: antiquewhite;margin:0;padding: 42px;">
+          <div style="max-width: 600px; margin: 0 auto;padding: 20px; background-color: #ffff;border-radius: 5px; box-shadow: 0 0 10;">
+              <h1 style="font-size: 24px; color: #333333; margin-bottom: 20px;">Confirmación de compra</h1>
+              <p>Hola,</p>
+              <p>Gracias por tu compra. Aquí están los detalles:</p>
+              <ul>
+                ${productos.map(item => `
+                  <li>${item.titulo} - Cantidad: ${item.cantidad} - $${item.precio.toFixed(2)}</li>
+                `).join('')}
+              </ul>
+              <p><strong>Total: $${grantotal.toFixed(2)}</strong></p>
+              <p>Para ver tu ticket de compra, haz clic en el siguiente enlace:</p>
+              <p><a style="display: inline-block; padding: 10px 20px; background-color: #337ab7; color:#fff; text-decoration: none; border-radius:3px;" 
+                 href="http://localhost:3000/ticket/${nuevaCompra._id}">Ver ticket de compra</a></p>
+          </div></div>`
+    };
 
-    // Enviar correo
-    await transporter.sendMail(mailOptions);
-    
- // Limpiar carrito del localStorage
-    if (req.session.cart) {
-      delete req.session.cart;
-    }
+    // Enviar correo
+    await transporter.sendMail(mailOptions);
+    
+ // Limpiar carrito del localStorage
+    if (req.session.cart) {
+      delete req.session.cart;
+    }
 
-    console.log("Compra registrada exitosamente");
-    res.redirect(`/ticket/${nuevaCompra._id}`);
+    console.log("Compra registrada exitosamente");
+    res.redirect(`/ticket/${nuevaCompra._id}`);
 ;
-  
+  
 
-  } catch (err) {
-    console.error("Error al procesar compra:", err.message);
-  }
+  } catch (err) {
+    console.error("Error al procesar compra:", err.message);
+    // Redirige para que el flujo de compra continúe, incluso si el correo falla
+    console.log("Error de correo, redirigiendo a compras."); 
+    res.redirect("/mis-compras"); 
+  }
 };
 
 exports.ticket_get = async (req, res) => {
