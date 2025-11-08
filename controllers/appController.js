@@ -135,8 +135,8 @@ const transporter = nodemailer.createTransport({
   secure: false, 
   auth: {
     user: "apikey", // Usuario fijo de SendGrid para SMTP
-    pass: "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" // <--- ¡TU CLAVE SECRETA COMPLETA!
-  }
+    pass: process.env.SENDGRID_API_KEY
+}
 });
 
 // Opciones del correo
