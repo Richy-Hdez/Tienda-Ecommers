@@ -11,6 +11,7 @@
 
 Tienda Web v1.0 es un proyecto académico desarrollado en el marco de la asignatura Ingeniería de Pruebas en el Instituto Politécnico Nacional (UPIICSA).
 El objetivo fue diseñar, implementar y validar una aplicación web funcional para la venta de ropa en línea, utilizando metodologías ágiles (Scrum) y aplicando diferentes niveles de pruebas de software.
+
 Enlace de la tienda: [Tienda](https://tienda-ecommers.onrender.com).
 
 ---
