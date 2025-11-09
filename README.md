@@ -64,4 +64,10 @@ El objetivo fue diseñar, implementar y validar una aplicación web funcional pa
 - PHP / Node.js  
 - MySQL  
 - Selenium  
-- Visual Studio Code  
+- Visual Studio Code
+
+---
+
+## 📂 Enlaces 
+- 📙 Evidencia de la Entrevista (Prueba Alfa): [Google Drive](https://drive.google.com/file/d/1nKVksmI8LNem82-qbj7-3fkvhNtn9d-G/view?usp=sharing)
+- 📋 Formulario (Prueba Beta): [Google Form](https://docs.google.com/forms/d/1-6o7OnUnm_Tp7Lnj_L3kdVVl41OHAAvhoqJRvYzefW4/edit#responses) 
