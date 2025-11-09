@@ -61,7 +61,7 @@ El objetivo fue diseñar, implementar y validar una aplicación web funcional pa
 
 ## 🧰 Tecnologías
 - HTML, CSS, JavaScript  
-- PHP / Node.js  
+- PHP 
 - MySQL  
 - Selenium  
 - Visual Studio Code
